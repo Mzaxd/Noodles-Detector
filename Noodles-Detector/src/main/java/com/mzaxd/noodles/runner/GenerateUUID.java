@@ -15,8 +15,6 @@ public class GenerateUUID implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if (IdUtil.isFirstInit()) {
-            IdUtil.initDetectorId();
-        }
+        log.info("探测器Id：{}", IdUtil.getDetectorId());
     }
 }

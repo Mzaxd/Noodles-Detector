@@ -1,15 +1,20 @@
 package com.mzaxd.noodles.util;
 
+import cn.hutool.core.io.FastByteArrayOutputStream;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.IoUtil;
+import com.fasterxml.jackson.core.io.UTF8Writer;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.Charset;
 import java.util.UUID;
 
 /**
@@ -31,33 +36,7 @@ public class IdUtil {
     }
 
     public static String getDetectorId() throws IOException {
-        return FileUtil.readUtf8String(getIdFile());
-    }
-
-    public static boolean isFirstInit() throws IOException {
-        if (FileUtil.isEmpty(getIdFile())) {
-            return true;
-        } else {
-            getDetectorId();
-            return false;
-        }
-    }
-
-    public static boolean initDetectorId() throws IOException {
-        File file = getIdFile();
-        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-        FileUtil.writeUtf8String(uuid, file);
-        log.info("首次使用此探测器，自动生成识别码为：{}", uuid);
-        if (FileUtil.isEmpty(file)) {
-            log.info("探测器UUID初始化失败");
-        }
-        log.info("探测器UUID初始化成功");
-        return true;
-    }
-
-    public static File getIdFile() throws IOException {
-        Resource resource = loader.getResource("classpath:id.txt");
-        String path = resource.getFile().getPath();
-        return (FileUtil.file(path));
+        InputStream inputStream = loader.getResource("classpath:id.txt").getInputStream();
+        return IoUtil.read(inputStream, "utf8");
     }
 }

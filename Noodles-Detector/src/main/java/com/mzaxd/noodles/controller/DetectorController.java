@@ -5,8 +5,8 @@ import com.mzaxd.noodles.domain.ResponseResult;
 import com.mzaxd.noodles.enums.AppHttpCodeEnum;
 import com.mzaxd.noodles.domain.message.Server;
 import com.mzaxd.noodles.service.RabbitMqService;
-import com.mzaxd.noodles.util.IdUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,6 +20,9 @@ import java.io.IOException;
 @Slf4j
 @RestController
 public class DetectorController {
+
+    @Value("${detector.id}")
+    private String detectorId;
 
     @Resource
     private RabbitMqService rabbitMqService;
@@ -82,11 +85,7 @@ public class DetectorController {
 
     @GetMapping("/getDetectorID")
     public ResponseResult getDetectorID() {
-        try {
-            String detectorId = IdUtil.getDetectorId();
-            return ResponseResult.okResult(detectorId);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        log.info("探测器Id为：{}", detectorId);
+        return ResponseResult.okResult(detectorId);
     }
 }

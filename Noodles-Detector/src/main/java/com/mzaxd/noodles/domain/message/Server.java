@@ -8,8 +8,9 @@ package com.mzaxd.noodles.domain.message;
 import com.mzaxd.noodles.constant.OsConstant;
 import com.mzaxd.noodles.util.Arith;
 import com.mzaxd.noodles.util.FormatUtil;
-import com.mzaxd.noodles.util.IdUtil;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import oshi.SystemInfo;
 import oshi.hardware.*;
 import oshi.software.os.FileSystem;
@@ -32,6 +33,7 @@ import java.util.*;
  * @author huasheng
  */
 @Data
+@Component
 public class Server {
 
     private static final int OSHI_WAIT_SECOND = 1000;
@@ -40,9 +42,7 @@ public class Server {
      */
     private static final int SLEEP_TIME = 2 * 1000;
 
-    /**
-     * 探测器id
-     */
+    @Value("${detector.id}")
     private String detectorId;
 
     /**
@@ -104,7 +104,7 @@ public class Server {
         // 设置磁盘信息
         setSysFiles(si.getOperatingSystem());
         //设置探测器id
-        setDetectorId(IdUtil.getDetectorId());
+        setDetectorId(detectorId);
 
     }
 

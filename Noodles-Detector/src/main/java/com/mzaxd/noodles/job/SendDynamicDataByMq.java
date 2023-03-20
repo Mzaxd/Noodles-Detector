@@ -23,6 +23,4 @@ public class SendDynamicDataByMq {
             rabbitMqService.sendDynamicData();
         }
     }
-
-
 }

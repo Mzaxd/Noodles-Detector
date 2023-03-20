@@ -6,3 +6,7 @@ spring:
     port: 5672
     username: mzaxd
     password: 200712
+
+detector:
+  #在这里填写任意UUID（不一定是UUID，只要保证不和其他探测器ID重复即可）
+  Id:

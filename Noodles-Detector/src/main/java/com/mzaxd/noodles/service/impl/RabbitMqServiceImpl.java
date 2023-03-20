@@ -4,9 +4,9 @@ import com.mzaxd.noodles.constant.RabbitMqConstant;
 import com.mzaxd.noodles.domain.message.DynamicData;
 import com.mzaxd.noodles.domain.message.Server;
 import com.mzaxd.noodles.service.RabbitMqService;
-import com.mzaxd.noodles.util.IdUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -18,6 +18,9 @@ import javax.annotation.Resource;
 @Slf4j
 @Service
 public class RabbitMqServiceImpl implements RabbitMqService {
+
+    @Value("${detector.id}")
+    private String detectorId;
 
     @Resource
     private RabbitTemplate rabbitTemplate;
@@ -38,7 +41,7 @@ public class RabbitMqServiceImpl implements RabbitMqService {
                     .setMemFree(server.getMem().getFree())
                     .setTxPercent(server.getNetWork().getTxPercent())
                     .setRxPercent(server.getNetWork().getRxPercent())
-                    .setDetectorId(IdUtil.getDetectorId());
+                    .setDetectorId(detectorId);
             rabbitTemplate.convertAndSend(RabbitMqConstant.DYNAMIC_DATA_EXCHANGE, RabbitMqConstant.DYNAMIC_DATA_ROUTING, dynamicData);
             log.info("发送消息DynamicData：{}", dynamicData);
         } catch (Exception e) {
